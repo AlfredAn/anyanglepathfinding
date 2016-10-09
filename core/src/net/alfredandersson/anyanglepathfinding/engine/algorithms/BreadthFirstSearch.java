@@ -1,7 +1,6 @@
 package net.alfredandersson.anyanglepathfinding.engine.algorithms;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
 import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.GridPathfinder;
@@ -15,9 +14,12 @@ public final class BreadthFirstSearch extends GridPathfinder {
   
   private final int[][]
           cameFromX, cameFromY,
-          steps;
+          steps,
+          lastModified;
   
   private final int[] buf;
+  
+  private int modIndex = 0;
   
   public BreadthFirstSearch(Map map, GridConnections con) {
     super(map, con);
@@ -27,21 +29,21 @@ public final class BreadthFirstSearch extends GridPathfinder {
     
     steps = new int[map.getWidth() + 1][map.getHeight() + 1];
     
+    lastModified = new int[map.getWidth() + 1][map.getHeight() + 1];
+    
     buf = new int[con.maxNeighbors() * 2];
   }
   
   private void reset() {
     openListX.clear();
     openListY.clear();
-    
-    for (int x = 0; x < map.getWidth(); x++) {
-      Arrays.fill(cameFromX[x], -1);
-    }
   }
   
   @Override
   public int[] findPath(int startX, int startY, int endX, int endY) {
     reset();
+    
+    modIndex++;
     
     openListX.addLast(startX);
     openListY.addLast(startY);
@@ -81,7 +83,9 @@ public final class BreadthFirstSearch extends GridPathfinder {
         int neighborX = buf[i * 2];
         int neighborY = buf[i * 2 + 1];
         
-        if (cameFromX[neighborX][neighborY] == -1) {
+        if (lastModified[neighborX][neighborY] != modIndex) {
+          lastModified[neighborX][neighborY] = modIndex;
+          
           openListX.add(neighborX);
           openListY.add(neighborY);
           
