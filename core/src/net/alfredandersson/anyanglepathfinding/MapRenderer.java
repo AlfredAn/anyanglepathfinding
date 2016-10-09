@@ -72,7 +72,9 @@ public final class MapRenderer implements Disposable {
       }
     }
     
-    Pixmap pixmap = new Pixmap(buf.array(), 0, buf.capacity());
+    buf.flip();
+    
+    Pixmap pixmap = new Pixmap(buf.array(), 0, buf.limit());
     Texture tex = new Texture(pixmap, Pixmap.Format.RGBA8888, false);
     pixmap.dispose();
     
