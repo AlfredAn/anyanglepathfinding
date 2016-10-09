@@ -61,8 +61,6 @@ public final class BreadthFirstSearch extends GridPathfinder {
         // assemble the path
         int[] path = new int[(currentSteps + 1) * 2];
         
-        System.out.println("steps: " + currentSteps);
-        System.out.println("-----");
         for (int i = currentSteps; i >= 0; i--) {
           path[i * 2] = currentX;
           path[i * 2 + 1] = currentY;
@@ -72,8 +70,6 @@ public final class BreadthFirstSearch extends GridPathfinder {
           
           currentX = newX;
           currentY = newY;
-          
-          System.out.println("(" + path[i*2] + ", " + path[i*2+1] + ")");
         }
         
         return path;

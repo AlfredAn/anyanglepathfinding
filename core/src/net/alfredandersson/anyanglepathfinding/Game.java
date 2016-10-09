@@ -48,7 +48,10 @@ public final class Game {
       int endX = rand.nextInt(map.getWidth() + 1);
       int endY = rand.nextInt(map.getHeight() + 1);
       
+      long time = System.nanoTime();
       int[] path = pathfinder.findPath(startX, startY, endX, endY);
+      long delta = System.nanoTime() - time;
+      System.out.println(pathfinder.getClass().getSimpleName() + " took " + ((double)delta * 0.000001) + " ms.");
       
       if (path != null) {
         pathRenderer.setPath(path);
