@@ -1,17 +1,29 @@
 package net.alfredandersson.anyanglepathfinding;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
+import net.alfredandersson.anyanglepathfinding.engine.FourConnectedGrid;
+import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
+import net.alfredandersson.anyanglepathfinding.engine.Pathfinder;
+import net.alfredandersson.anyanglepathfinding.engine.algorithms.BreadthFirstSearch;
 
 public final class Game {
   
   public final AnyAnglePathfinding main;
   
   private Map map;
+  private GridConnections con = new FourConnectedGrid();
+  private Pathfinder pathfinder;
   
   private MapRenderer mapRenderer;
+  
+  private PathRenderer pathRenderer;
+  
+  private final Random rand = new Random();
   
   public Game(AnyAnglePathfinding main) {
     this.main = main;
@@ -21,10 +33,34 @@ public final class Game {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    
+    pathfinder = new BreadthFirstSearch(map, con);
+    
+    create();
+    displayRandomPath();
+  }
+  
+  private void displayRandomPath() {
+    while (true) {
+      int startX = rand.nextInt(map.getWidth() + 1);
+      int startY = rand.nextInt(map.getHeight() + 1);
+      
+      int endX = rand.nextInt(map.getWidth() + 1);
+      int endY = rand.nextInt(map.getHeight() + 1);
+      
+      int[] path = pathfinder.findPath(startX, startY, endX, endY);
+      
+      if (path != null) {
+        pathRenderer.setPath(path);
+        break;
+      }
+    }
   }
   
   void update() {
-    
+    if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+      displayRandomPath();
+    }
   }
   
   void draw(Draw d) {
@@ -39,14 +75,23 @@ public final class Game {
     d.cam.update();
     
     mapRenderer.draw(d);
+    pathRenderer.draw(d);
   }
   
   void create() {
-    mapRenderer = new MapRenderer(map);
+    if (mapRenderer == null) {
+      mapRenderer = new MapRenderer(map, con);
+      pathRenderer = new PathRenderer();
+    }
   }
   
   void dispose() {
-    mapRenderer.dispose();
-    mapRenderer = null;
+    if (mapRenderer != null) {
+      mapRenderer.dispose();
+      mapRenderer = null;
+
+      pathRenderer.dispose();
+      pathRenderer = null;
+    }
   }
 }

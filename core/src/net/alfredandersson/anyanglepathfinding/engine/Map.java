@@ -22,7 +22,15 @@ public final class Map {
   }
   
   public boolean isBlocked(int x, int y) {
-    return cellBlocked[x][y];
+    if (!isValidCell(x, y)) {
+      return true;
+    } else {
+      return cellBlocked[x][y];
+    }
+  }
+  
+  public boolean isValidCell(int x, int y) {
+    return x >= 0 && x < getWidth() && y >= 0 && y < getHeight();
   }
   
   public static Map fromPNG(InputStream in) throws IOException {
