@@ -1,7 +1,6 @@
 package net.alfredandersson.anyanglepathfinding;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import java.io.IOException;
 import java.io.InputStream;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
@@ -12,7 +11,7 @@ public final class Game {
   
   private Map map;
   
-  private Texture mapTex;
+  private MapRenderer mapRenderer;
   
   public Game(AnyAnglePathfinding main) {
     this.main = main;
@@ -39,19 +38,15 @@ public final class Game {
     d.cam.translate((float)((map.width - xSize) * 0.5), (float)((map.height - ySize) * 0.5));
     d.cam.update();
     
-    d.enableBlending();
-    d.sprites.setProjectionMatrix(d.cam.combined);
-    d.sprites.begin();
-    d.sprites.draw(mapTex, 0, 0);
-    d.sprites.end();
+    mapRenderer.draw(d);
   }
   
   void create() {
-    mapTex = map.createTexture();
+    mapRenderer = new MapRenderer(map);
   }
   
   void dispose() {
-    mapTex.dispose();
-    mapTex = null;
+    mapRenderer.dispose();
+    mapRenderer = null;
   }
 }
