@@ -48,6 +48,7 @@ project(":core") {
   
   dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "org.l33tlabs.twl:pngdecoder:1.0"
   }
 }
 

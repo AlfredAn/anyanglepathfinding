@@ -21,6 +21,8 @@ public final class Draw implements Disposable {
 
     shapes = new ShapeRenderer();
     shapes.setAutoShapeType(true);
+    
+    cam = new OrthographicCamera();
   }
   
   public void enableBlending() {
