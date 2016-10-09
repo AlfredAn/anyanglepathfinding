@@ -28,14 +28,14 @@ public final class Game {
   }
   
   void draw(Draw d) {
-    double xScale = (double)map.width / Gdx.graphics.getBackBufferWidth();
-    double yScale = (double)map.height / Gdx.graphics.getBackBufferHeight();
+    double xScale = (double)map.getWidth() / Gdx.graphics.getBackBufferWidth();
+    double yScale = (double)map.getHeight() / Gdx.graphics.getBackBufferHeight();
     double maxScale = Math.max(xScale, yScale);
     
-    double xSize = map.width * maxScale / xScale;
-    double ySize = map.height * maxScale / yScale;
+    double xSize = map.getWidth() * maxScale / xScale;
+    double ySize = map.getHeight() * maxScale / yScale;
     d.cam.setToOrtho(true, (float)xSize, (float)ySize);
-    d.cam.translate((float)((map.width - xSize) * 0.5), (float)((map.height - ySize) * 0.5));
+    d.cam.translate((float)((map.getWidth() - xSize) * 0.5), (float)((map.getHeight() - ySize) * 0.5));
     d.cam.update();
     
     mapRenderer.draw(d);

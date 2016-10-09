@@ -39,31 +39,31 @@ public final class MapRenderer implements Disposable {
   
   private Texture createTexture() {
     // write the image as BMP
-    ByteBuffer buf = ByteBuffer.allocate(4 * map.width * map.height + 14 + 40);
+    ByteBuffer buf = ByteBuffer.allocate(4 * map.getWidth() * map.getHeight() + 14 + 40);
     buf.order(ByteOrder.LITTLE_ENDIAN);
     
     // file header (14 bytes)
     buf.put((byte)'B');
     buf.put((byte)'M');
-    buf.putInt(4 * map.width * map.height + 14 + 40);
+    buf.putInt(4 * map.getWidth() * map.getHeight() + 14 + 40);
     buf.putInt(0);
     buf.putInt(14 + 40);
     
     // BITMAPINFO header (40 bytes)
     buf.putInt(40);
-    buf.putInt(map.width);
-    buf.putInt(map.height);
+    buf.putInt(map.getWidth());
+    buf.putInt(map.getHeight());
     buf.putShort((short)1);
     buf.putShort((short)32); // bits per pixel
     buf.putInt(0);
-    buf.putInt(4 * map.width * map.height);
+    buf.putInt(4 * map.getWidth() * map.getHeight());
     buf.putInt(3600);
     buf.putInt(3600);
     buf.putInt(0);
     buf.putInt(0);
     
-    for (int y = 0; y < map.height; y++) {
-      for (int x = 0; x < map.width; x++) {
+    for (int y = 0; y < map.getHeight(); y++) {
+      for (int x = 0; x < map.getWidth(); x++) {
         if (map.isBlocked(x, y)) {
           buf.putInt(0xff000000); // black
         } else {
