@@ -18,6 +18,7 @@ public final class BreadthFirstSearch extends GridPathfinder {
           lastModified;
   
   private final int[] buf;
+  private final float[] costBuf;
   
   private int modIndex = 0;
   
@@ -32,6 +33,7 @@ public final class BreadthFirstSearch extends GridPathfinder {
     lastModified = new int[map.getWidth() + 1][map.getHeight() + 1];
     
     buf = new int[con.maxNeighbors() * 2];
+    costBuf = new float[con.maxNeighbors()];
   }
   
   private void reset() {
@@ -77,7 +79,7 @@ public final class BreadthFirstSearch extends GridPathfinder {
         return path;
       }
       
-      int numNeighbors = con.getNeighbors(map, currentX, currentY, buf);
+      int numNeighbors = con.getNeighbors(map, currentX, currentY, buf, costBuf);
       
       for (int i = 0; i < numNeighbors; i++) {
         int neighborX = buf[i * 2];

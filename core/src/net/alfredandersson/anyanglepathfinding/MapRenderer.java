@@ -143,10 +143,11 @@ public final class MapRenderer implements Disposable {
     TFloatList verts = new TFloatArrayList();
     
     int[] buf = new int[con.maxNeighbors() * 2];
+    float[] costBuf = new float[con.maxNeighbors()];
     
     for (int fromY = 0; fromY <= map.getHeight(); fromY++) {
       for (int fromX = 0; fromX <= map.getWidth(); fromX++) {
-        int numNeighbors = con.getNeighbors(map, fromX, fromY, buf);
+        int numNeighbors = con.getNeighbors(map, fromX, fromY, buf, costBuf);
         
         for (int i = 0; i < numNeighbors; i++) {
           int toX = buf[i * 2];
