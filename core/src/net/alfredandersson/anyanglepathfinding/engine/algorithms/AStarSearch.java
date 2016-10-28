@@ -7,8 +7,9 @@ import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.GridPathfinder;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
 import net.alfredandersson.anyanglepathfinding.engine.ComparablePoint;
+import net.alfredandersson.anyanglepathfinding.engine.Heuristic;
 
-public final class DijkstraSearch extends GridPathfinder {
+public final class AStarSearch extends GridPathfinder {
   
   private final PriorityQueue<ComparablePoint> open = new PriorityQueue<>();
   private final List<ComparablePoint> pool = new ArrayList<>();
@@ -16,7 +17,7 @@ public final class DijkstraSearch extends GridPathfinder {
   private final int[][]
           cameFromX, cameFromY,
           steps,
-          lastModified; // odd if extended, even if not
+          lastModified;
   
   private final float[][]
           cost;
@@ -26,7 +27,13 @@ public final class DijkstraSearch extends GridPathfinder {
   
   private int modIndex = 0;
   
-  public DijkstraSearch(Map map, GridConnections con) {
+  private final Heuristic h;
+  
+  public AStarSearch(Map map, GridConnections con) {
+    this(map, con, con.defaultHeuristic());
+  }
+  
+  public AStarSearch(Map map, GridConnections con, Heuristic h) {
     super(map, con);
     
     cameFromX = new int[map.getWidth() + 1][map.getHeight() + 1];
@@ -40,6 +47,8 @@ public final class DijkstraSearch extends GridPathfinder {
     
     buf = new int[con.maxNeighbors() * 2];
     costBuf = new float[con.maxNeighbors()];
+    
+    this.h = h;
   }
   
   private void reset() {
@@ -55,7 +64,7 @@ public final class DijkstraSearch extends GridPathfinder {
     
     modIndex += 2;
     
-    addToOpen(startX, startY, 0);
+    addToOpen(startX, startY, 0, endX, endY);
     
     cameFromX[startX][startY] = startX;
     cameFromY[startX][startY] = startY;
@@ -106,7 +115,7 @@ public final class DijkstraSearch extends GridPathfinder {
         if (!(lastModified[neighborX][neighborY] == modIndex || lastModified[neighborX][neighborY] == modIndex + 1) || newCost < cost[neighborX][neighborY]) {
           lastModified[neighborX][neighborY] = modIndex;
           
-          addToOpen(neighborX, neighborY, newCost);
+          addToOpen(neighborX, neighborY, newCost, endX, endY);
           
           cameFromX[neighborX][neighborY] = current.x;
           cameFromY[neighborX][neighborY] = current.y;
@@ -123,8 +132,8 @@ public final class DijkstraSearch extends GridPathfinder {
     return null;
   }
   
-  private void addToOpen(int x, int y, float cost) {
-    open.add(newPoint(x, y, cost));
+  private void addToOpen(int x, int y, float cost, int endX, int endY) {
+    open.add(newPoint(x, y, cost + h.get(x, y, endX, endY)));
   }
   
   private ComparablePoint newPoint(int x, int y, float priority) {
