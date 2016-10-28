@@ -9,7 +9,7 @@ import net.alfredandersson.anyanglepathfinding.engine.EightConnectedGrid;
 import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
 import net.alfredandersson.anyanglepathfinding.engine.Pathfinder;
-import net.alfredandersson.anyanglepathfinding.engine.algorithms.BreadthFirstSearch;
+import net.alfredandersson.anyanglepathfinding.engine.algorithms.BestFirstSearch;
 
 public final class Game {
   
@@ -34,7 +34,7 @@ public final class Game {
       throw new RuntimeException(e);
     }
     
-    pathfinder = new BreadthFirstSearch(map, con);
+    pathfinder = new BestFirstSearch(map, con);
     
     create();
     displayRandomPath();

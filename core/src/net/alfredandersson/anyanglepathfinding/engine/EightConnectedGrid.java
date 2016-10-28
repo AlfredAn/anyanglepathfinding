@@ -2,6 +2,8 @@ package net.alfredandersson.anyanglepathfinding.engine;
 
 public class EightConnectedGrid implements GridConnections {
   
+  public static final EightConnectedGrid INSTANCE = new EightConnectedGrid();
+  
   private static final float DIAG_COST = (float)Math.sqrt(2);
   
   @Override
@@ -112,5 +114,10 @@ public class EightConnectedGrid implements GridConnections {
     } else {
       return DIAG_COST;
     }
+  }
+  
+  @Override
+  public Heuristic defaultHeuristic() {
+    return DiagonalDistance.INSTANCE;
   }
 }

@@ -25,4 +25,6 @@ public interface GridConnections {
    * Returns the cost of moving between two squares, or {@code Float.POSITIVE_INFINITY} if there is no connection.
    */
   float cost(Map map, int fromX, int fromY, int toX, int toY);
+  
+  Heuristic defaultHeuristic();
 }

@@ -2,6 +2,8 @@ package net.alfredandersson.anyanglepathfinding.engine;
 
 public final class FourConnectedGrid implements GridConnections {
   
+  public static final FourConnectedGrid INSTANCE = new FourConnectedGrid();
+  
   @Override
   public int maxNeighbors() {
     return 4;
@@ -70,5 +72,10 @@ public final class FourConnectedGrid implements GridConnections {
     } else {
       return Float.POSITIVE_INFINITY;
     }
+  }
+  
+  @Override
+  public Heuristic defaultHeuristic() {
+    return ManhattanDistance.INSTANCE;
   }
 }
