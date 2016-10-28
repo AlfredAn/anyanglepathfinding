@@ -47,6 +47,9 @@ public final class BestFirstSearch extends GridPathfinder {
   }
   
   private void reset() {
+    for (ComparablePoint p : open) {
+      freePoint(p);
+    }
     open.clear();
   }
   
@@ -103,6 +106,8 @@ public final class BestFirstSearch extends GridPathfinder {
           steps[neighborX][neighborY] = currentSteps + 1;
         }
       }
+      
+      freePoint(current);
     }
     
     return null;
