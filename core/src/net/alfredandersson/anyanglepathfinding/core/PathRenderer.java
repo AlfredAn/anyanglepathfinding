@@ -1,4 +1,4 @@
-package net.alfredandersson.anyanglepathfinding;
+package net.alfredandersson.anyanglepathfinding.core;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import gnu.trove.list.TFloatList;
 import gnu.trove.list.array.TFloatArrayList;
-import net.alfredandersson.anyanglepathfinding.util.GraphicsUtil;
+import net.alfredandersson.anyanglepathfinding.core.util.GraphicsUtil;
 
 public final class PathRenderer implements Disposable {
   

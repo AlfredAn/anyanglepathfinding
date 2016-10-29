@@ -1,4 +1,4 @@
-package net.alfredandersson.anyanglepathfinding;
+package net.alfredandersson.anyanglepathfinding.core;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
-import net.alfredandersson.anyanglepathfinding.util.GraphicsUtil;
+import net.alfredandersson.anyanglepathfinding.core.util.GraphicsUtil;
 
 public final class MapRenderer implements Disposable {
   

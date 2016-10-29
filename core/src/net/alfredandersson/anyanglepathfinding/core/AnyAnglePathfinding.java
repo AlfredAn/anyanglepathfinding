@@ -1,4 +1,4 @@
-package net.alfredandersson.anyanglepathfinding;
+package net.alfredandersson.anyanglepathfinding.core;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

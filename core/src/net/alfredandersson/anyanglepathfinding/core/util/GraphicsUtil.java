@@ -1,4 +1,4 @@
-package net.alfredandersson.anyanglepathfinding.util;
+package net.alfredandersson.anyanglepathfinding.core.util;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 

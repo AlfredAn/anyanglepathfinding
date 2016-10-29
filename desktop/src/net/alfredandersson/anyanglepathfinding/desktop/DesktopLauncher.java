@@ -3,7 +3,7 @@ package net.alfredandersson.anyanglepathfinding.desktop;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import net.alfredandersson.anyanglepathfinding.AnyAnglePathfinding;
+import net.alfredandersson.anyanglepathfinding.core.AnyAnglePathfinding;
 
 public class DesktopLauncher {
   
