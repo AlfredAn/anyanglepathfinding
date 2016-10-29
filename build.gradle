@@ -34,7 +34,6 @@ allprojects {
 project(":desktop") {
   apply plugin: "java"
   
-  
   dependencies {
     compile project(":core")
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -45,9 +44,16 @@ project(":desktop") {
 project(":core") {
   apply plugin: "java"
   
+  dependencies {
+    compile project(":engine")
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+  }
+}
+
+project(":engine") {
+  apply plugin: "java"
   
   dependencies {
-    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "org.l33tlabs.twl:pngdecoder:1.0"
     compile 'net.sf.trove4j:trove4j:3.0.3'
   }
