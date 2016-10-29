@@ -50,6 +50,14 @@ project(":core") {
   }
 }
 
+project(":benchmark") {
+  apply plugin: "java"
+  
+  dependencies {
+    compile project(":engine")
+  }
+}
+
 project(":engine") {
   apply plugin: "java"
   
