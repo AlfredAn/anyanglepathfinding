@@ -2,11 +2,18 @@ package net.alfredandersson.anyanglepathfinding.engine;
 
 public final class Point {
   
-  public final int x, y;
+  public int x, y;
+  
+  public Point() {}
   
   public Point(int x, int y) {
+    set(x, y);
+  }
+  
+  public Point set(int x, int y) {
     this.x = x;
     this.y = y;
+    return this;
   }
   
   @Override

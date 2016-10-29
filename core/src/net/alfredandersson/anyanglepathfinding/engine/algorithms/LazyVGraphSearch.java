@@ -16,6 +16,8 @@ public class LazyVGraphSearch extends AStarSearch {
   protected final List<Point> validNodeList = new ArrayList<>();
   protected final Set<Point> validNodeSet = new THashSet<>();
   
+  private final Point tempPoint = new Point();
+  
   public LazyVGraphSearch(Map map) {
     this(map, EuclideanHeuristic.INSTANCE);
   }
@@ -91,11 +93,19 @@ public class LazyVGraphSearch extends AStarSearch {
   }
   
   @Override
-  protected void addStartNodeToOpenSet(int startX, int startY) {}
+  protected void addStartNodeToOpenSet(int startX, int startY) {
+    if (validNodeSet.contains(tempPoint.set(startX, startY))) {
+      super.addStartNodeToOpenSet(startX, startY);
+    }
+  }
   
   @Override
   protected void initStartNode() {
     super.initStartNode();
+    
+    if (validNodeSet.contains(tempPoint.set(startX, startY))) {
+      return;
+    }
     
     // add all nodes to the open set (as neighbors to the starting node)
     // they will be checked for line of sight before first being visited

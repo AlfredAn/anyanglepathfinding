@@ -1,7 +1,9 @@
 package net.alfredandersson.anyanglepathfinding.engine.algorithms;
 
+import gnu.trove.set.hash.THashSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import net.alfredandersson.anyanglepathfinding.engine.CellTraversal;
 import net.alfredandersson.anyanglepathfinding.engine.EuclideanHeuristic;
 import net.alfredandersson.anyanglepathfinding.engine.Heuristic;
@@ -12,6 +14,9 @@ import net.alfredandersson.anyanglepathfinding.engine.VGraphConnections;
 public class VGraphSearch extends AStarSearch {
   
   protected final List<Point> validNodeList = new ArrayList<>();
+  protected final Set<Point> validNodeSet = new THashSet<>();
+  
+  private final Point tempPoint = new Point();
   
   public VGraphSearch(Map map) {
     this(map, EuclideanHeuristic.INSTANCE);
@@ -30,6 +35,7 @@ public class VGraphSearch extends AStarSearch {
         if (nearCellsBlocked == 1) {
           Point p = new Point(x, y);
           validNodeList.add(p);
+          validNodeSet.add(p);
         }
       }
     }
@@ -48,11 +54,19 @@ public class VGraphSearch extends AStarSearch {
   }
   
   @Override
-  protected void addStartNodeToOpenSet(int startX, int startY) {}
+  protected void addStartNodeToOpenSet(int startX, int startY) {
+    if (validNodeSet.contains(tempPoint.set(startX, startY))) {
+      super.addStartNodeToOpenSet(startX, startY);
+    }
+  }
   
   @Override
   protected void initStartNode() {
     super.initStartNode();
+    
+    if (validNodeSet.contains(tempPoint.set(startX, startY))) {
+      return;
+    }
     
     // add all nodes in line of sight to the open set (as neighbors to the starting node)
     currentX = startX;
