@@ -55,6 +55,6 @@ public class DijkstraSearch extends PriorityQueueSearch {
   
   @Override
   protected boolean shouldAddNeighbor(int neighborX, int neighborY) {
-    return !(lastModified[neighborX][neighborY] == modIndex || lastModified[neighborX][neighborY] == modIndex + 1) || newCost < cost[neighborX][neighborY];
+    return lastModified[neighborX][neighborY] != modIndex || newCost < cost[neighborX][neighborY];
   }
 }

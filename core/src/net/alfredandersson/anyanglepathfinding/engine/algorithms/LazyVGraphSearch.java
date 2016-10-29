@@ -1,7 +1,9 @@
 package net.alfredandersson.anyanglepathfinding.engine.algorithms;
 
+import gnu.trove.set.hash.THashSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import net.alfredandersson.anyanglepathfinding.engine.CellTraversal;
 import net.alfredandersson.anyanglepathfinding.engine.EuclideanHeuristic;
 import net.alfredandersson.anyanglepathfinding.engine.Heuristic;
@@ -9,15 +11,16 @@ import net.alfredandersson.anyanglepathfinding.engine.Map;
 import net.alfredandersson.anyanglepathfinding.engine.Point;
 import net.alfredandersson.anyanglepathfinding.engine.VGraphConnections;
 
-public class VGraphSearch extends AStarSearch {
+public class LazyVGraphSearch extends AStarSearch {
   
   protected final List<Point> validNodeList = new ArrayList<>();
+  protected final Set<Point> validNodeSet = new THashSet<>();
   
-  public VGraphSearch(Map map) {
+  public LazyVGraphSearch(Map map) {
     this(map, EuclideanHeuristic.INSTANCE);
   }
   
-  public VGraphSearch(Map map, Heuristic h) {
+  public LazyVGraphSearch(Map map, Heuristic h) {
     super(map, new VGraphConnections(map, false), h);
     
     for (int x = 0; x < map.getWidth() + 1; x++) {
@@ -30,6 +33,7 @@ public class VGraphSearch extends AStarSearch {
         if (nearCellsBlocked == 1) {
           Point p = new Point(x, y);
           validNodeList.add(p);
+          validNodeSet.add(p);
         }
       }
     }
@@ -48,13 +52,53 @@ public class VGraphSearch extends AStarSearch {
   }
   
   @Override
+  protected void incrementModIndex() {
+    modIndex += 3;
+  }
+  
+  @Override
+  protected boolean shouldExpandNode() {
+    if (lastModified[currentX][currentY] == modIndex + 2) {
+      return false;
+    } else if (lastModified[currentX][currentY] == modIndex) {
+      // haven't checked for line of sight yet
+      if (CellTraversal.collisionLine(map, startX, startY, currentX, currentY)) {
+        lastModified[currentX][currentY] = modIndex - 1; // pretend we never found this node
+        return false;
+      } else {
+        lastModified[currentX][currentY] = modIndex + 1;
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+  
+  @Override
+  protected boolean shouldAddNeighbor(int neighborX, int neighborY) {
+    if (lastModified[neighborX][neighborY] == modIndex) {
+      // haven't checked for line of sight yet
+      if (CellTraversal.collisionLine(map, startX, startY, neighborX, neighborY)) {
+        lastModified[neighborX][neighborY] = modIndex - 1;
+        return true;
+      } else {
+        lastModified[neighborX][neighborY] = modIndex + 1;
+        return false;
+      }
+    }
+    
+    return lastModified[neighborX][neighborY] != modIndex + 1 || newCost < cost[neighborX][neighborY];
+  }
+  
+  @Override
   protected void addStartNodeToOpenSet(int startX, int startY) {}
   
   @Override
   protected void initStartNode() {
     super.initStartNode();
     
-    // add all nodes in line of sight to the open set (as neighbors to the starting node)
+    // add all nodes to the open set (as neighbors to the starting node)
+    // they will be checked for line of sight before first being visited
     currentX = startX;
     currentY = startY;
     currentSteps = 0;
@@ -64,18 +108,21 @@ public class VGraphSearch extends AStarSearch {
       neighborX = p.x;
       neighborY = p.y;
       
-      if (CellTraversal.collisionLine(map, currentX, currentY, neighborX, neighborY)) {
-        continue;
-      }
-      
       int dx = neighborX - startX;
       int dy = neighborY - startY;
       
       newCost = neighborCost = (float)Math.sqrt(dx * dx + dy * dy);
       
       updateNeighbor();
+      lastModified[neighborX][neighborY] = modIndex;
       addToOpenSet(neighborX, neighborY);
     }
+  }
+  
+  @Override
+  protected void updateNeighbor() {
+    super.updateNeighbor();
+    lastModified[neighborX][neighborY] = modIndex + 1;
   }
   
   @Override
