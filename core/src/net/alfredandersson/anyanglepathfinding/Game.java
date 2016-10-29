@@ -5,11 +5,11 @@ import com.badlogic.gdx.Input.Keys;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
+import net.alfredandersson.anyanglepathfinding.engine.EightConnectedGrid;
 import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
 import net.alfredandersson.anyanglepathfinding.engine.Pathfinder;
-import net.alfredandersson.anyanglepathfinding.engine.VGraphConnections;
-import net.alfredandersson.anyanglepathfinding.engine.algorithms.AStarSearch;
+import net.alfredandersson.anyanglepathfinding.engine.algorithms.AStarPostSmoothedSearch;
 
 public final class Game {
   
@@ -34,8 +34,8 @@ public final class Game {
       throw new RuntimeException(e);
     }
     
-    con = new VGraphConnections(map, false);
-    pathfinder = new AStarSearch(map, con);
+    con = new EightConnectedGrid();
+    pathfinder = new AStarPostSmoothedSearch(map, con);
     
     create();
     displayRandomPath();
