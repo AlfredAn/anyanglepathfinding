@@ -4,6 +4,7 @@ import de.matthiasmann.twl.utils.PNGDecoder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public final class Map {
   
@@ -51,5 +52,23 @@ public final class Map {
     }
     
     return new Map(cells);
+  }
+  
+  public static Map fromArray(boolean[][] array) {
+    if (array.length == 0) {
+      return new Map(new boolean[0][]);
+    }
+    
+    int height = array[0].length;
+    
+    boolean[][] copy = new boolean[array.length][];
+    for (int i = 0; i < array.length; i++) {
+      if (array[i].length != height) {
+        throw new IllegalArgumentException();
+      }
+      copy[i] = Arrays.copyOf(array[i], height);
+    }
+    
+    return new Map(copy);
   }
 }

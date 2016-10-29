@@ -76,47 +76,6 @@ public class EightConnectedGrid implements GridConnections {
   }
   
   @Override
-  public boolean isNeighbor(Map map, int fromX, int fromY, int toX, int toY) {
-    if (Math.max(Math.abs(toX - fromX), Math.abs(toY - fromY)) != 1) {
-      return false;
-    }
-    
-    switch (toX - fromX + 4 * (toY - fromY)) {
-      case 1: // moving east
-        return !map.isBlocked(fromX, fromY - 1) || !map.isBlocked(fromX, fromY);
-      case -1: // moving west
-        return !map.isBlocked(fromX - 1, fromY - 1) || !map.isBlocked(fromX - 1, fromY);
-      case 4: // moving south
-        return !map.isBlocked(fromX - 1, fromY) || !map.isBlocked(fromX, fromY);
-      case -4: // moving north
-        return !map.isBlocked(fromX - 1, fromY - 1) || !map.isBlocked(fromX, fromY - 1);
-      case -4 + 1: // north-east
-        return !map.isBlocked(fromX, fromY - 1);
-      case -4 - 1: // north-west
-        return !map.isBlocked(fromX - 1, fromY - 1);
-      case 4 + 1: // south-west
-        return !map.isBlocked(fromX - 1, fromY);
-      case 4 - 1: // south-east
-        return !map.isBlocked(fromX, fromY);
-      default:
-        throw new AssertionError();
-    }
-  }
-  
-  @Override
-  public float cost(Map map, int fromX, int fromY, int toX, int toY) {
-    if (!isNeighbor(map, fromX, fromY, toX, toY)) {
-      return Float.POSITIVE_INFINITY;
-    }
-    
-    if (Math.abs(toX - fromX) + Math.abs(toY - fromY) == 1) {
-      return 1;
-    } else {
-      return DIAG_COST;
-    }
-  }
-  
-  @Override
   public Heuristic defaultHeuristic() {
     return DiagonalDistance.INSTANCE;
   }

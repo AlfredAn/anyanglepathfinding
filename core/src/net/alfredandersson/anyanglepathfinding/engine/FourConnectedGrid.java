@@ -46,35 +46,6 @@ public final class FourConnectedGrid implements GridConnections {
   }
   
   @Override
-  public boolean isNeighbor(Map map, int fromX, int fromY, int toX, int toY) {
-    if (Math.abs(toX - fromX) + Math.abs(toY - fromY) != 1) {
-      return false;
-    }
-    
-    switch (toX - fromX + 2 * (toY - fromY)) {
-      case 1: // moving east
-        return !map.isBlocked(fromX, fromY - 1) || !map.isBlocked(fromX, fromY);
-      case -1: // moving west
-        return !map.isBlocked(fromX - 1, fromY - 1) || !map.isBlocked(fromX - 1, fromY);
-      case 2: // moving south
-        return !map.isBlocked(fromX - 1, fromY) || !map.isBlocked(fromX, fromY);
-      case -2: // moving north
-        return !map.isBlocked(fromX - 1, fromY - 1) || !map.isBlocked(fromX, fromY - 1);
-      default:
-        throw new AssertionError();
-    }
-  }
-  
-  @Override
-  public float cost(Map map, int fromX, int fromY, int toX, int toY) {
-    if (isNeighbor(map, fromX, fromY, toX, toY)) {
-      return 1;
-    } else {
-      return Float.POSITIVE_INFINITY;
-    }
-  }
-  
-  @Override
   public Heuristic defaultHeuristic() {
     return ManhattanDistance.INSTANCE;
   }

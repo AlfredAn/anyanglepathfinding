@@ -16,15 +16,5 @@ public interface GridConnections {
    */
   int getNeighbors(Map map, int x, int y, int[] coord, float[] cost);
   
-  /**
-   * Returns whether the two given cells are neighbors.
-   */
-  boolean isNeighbor(Map map, int fromX, int fromY, int toX, int toY);
-  
-  /**
-   * Returns the cost of moving between two squares, or {@code Float.POSITIVE_INFINITY} if there is no connection.
-   */
-  float cost(Map map, int fromX, int fromY, int toX, int toY);
-  
   Heuristic defaultHeuristic();
 }
