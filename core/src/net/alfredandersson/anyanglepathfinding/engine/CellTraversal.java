@@ -4,9 +4,6 @@ public final class CellTraversal {
   
   private CellTraversal() {}
   
-  /**
-   * Source: http://lifc.univ-fcomte.fr/home/~ededu/projects/bresenham/
-   */
   public static boolean collisionLine(Map map, int x1, int y1, int x2, int y2) {
     int x, dx, xStep, endX;
     if (x2 >= x1) {
