@@ -5,12 +5,12 @@ import com.badlogic.gdx.Input.Keys;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
+import net.alfredandersson.anyanglepathfinding.engine.EightConnectedGrid;
 import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.GridPathfinder;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
 import net.alfredandersson.anyanglepathfinding.engine.Pathfinder;
-import net.alfredandersson.anyanglepathfinding.engine.algorithms.LazyVGraphSearch;
-import net.alfredandersson.anyanglepathfinding.engine.algorithms.VGraphSearch;
+import net.alfredandersson.anyanglepathfinding.engine.algorithms.ThetaStarSearch;
 
 public final class Game {
   
@@ -18,7 +18,7 @@ public final class Game {
   
   private Map map;
   private GridConnections con;
-  private Pathfinder pathfinder, pathfinder2;
+  private Pathfinder pathfinder;
   
   private MapRenderer mapRenderer;
   
@@ -29,14 +29,13 @@ public final class Game {
   public Game(AnyAnglePathfinding main) {
     this.main = main;
     
-    try (InputStream in = Gdx.files.internal("maps/test3.png").read(8192)) {
+    try (InputStream in = Gdx.files.internal("maps/test2.png").read(8192)) {
       map = Map.fromPNG(in);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
     
-    pathfinder = new VGraphSearch(map);
-    pathfinder2 = new LazyVGraphSearch(map);
+    pathfinder = new ThetaStarSearch(map, new EightConnectedGrid(map));
     con = ((GridPathfinder)pathfinder).con;
     
     create();
@@ -58,11 +57,7 @@ public final class Game {
       if (path != null) {
         pathRenderer.setPath(path);
         
-        long time2 = System.nanoTime();
-        path = pathfinder2.findPath(startX, startY, endX, endY);
-        long delta2 = System.nanoTime() - time2;
         System.out.println(pathfinder.getClass().getSimpleName() + " took " + ((double)delta * 0.000001) + " ms.");
-        System.out.println(pathfinder2.getClass().getSimpleName() + " took " + ((double)delta2 * 0.000001) + " ms.");
         break;
       }
     }
