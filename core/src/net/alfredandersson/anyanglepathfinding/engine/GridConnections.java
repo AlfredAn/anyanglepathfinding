@@ -1,11 +1,17 @@
 package net.alfredandersson.anyanglepathfinding.engine;
 
-public interface GridConnections {
+public abstract class GridConnections {
+  
+  public final Map map;
+  
+  public GridConnections(Map map) {
+    this.map = map;
+  }
   
   /**
    * Returns the maximal number of neighbors that a cell can have.
    */
-  int maxNeighbors();
+  public abstract int maxNeighbors();
   
   /**
    * Retrieves the positions of all the neighbors of the specified cell.
@@ -14,7 +20,7 @@ public interface GridConnections {
    * @param cost An array to put the neighbor costs in.
    * @return The number of neighbors added to the array.
    */
-  int getNeighbors(Map map, int x, int y, int[] coord, float[] cost);
+  public abstract int getNeighbors(int x, int y, int[] coord, float[] cost);
   
-  Heuristic defaultHeuristic();
+  public abstract Heuristic defaultHeuristic();
 }

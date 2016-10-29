@@ -1,8 +1,10 @@
 package net.alfredandersson.anyanglepathfinding.engine;
 
-public final class FourConnectedGrid implements GridConnections {
+public final class FourConnectedGrid extends GridConnections {
   
-  public static final FourConnectedGrid INSTANCE = new FourConnectedGrid();
+  public FourConnectedGrid(Map map) {
+    super(map);
+  }
   
   @Override
   public int maxNeighbors() {
@@ -10,7 +12,7 @@ public final class FourConnectedGrid implements GridConnections {
   }
   
   @Override
-  public int getNeighbors(Map map, int x, int y, int[] coord, float[] cost) {
+  public int getNeighbors(int x, int y, int[] coord, float[] cost) {
     int i = 0;
     int j = 0;
     

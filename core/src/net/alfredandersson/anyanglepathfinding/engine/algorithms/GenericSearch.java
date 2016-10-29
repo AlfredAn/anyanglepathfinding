@@ -30,8 +30,8 @@ public abstract class GenericSearch extends GridPathfinder {
     
     lastModified = new int[map.getWidth() + 1][map.getHeight() + 1];
     
-    buf = new int[con.maxNeighbors() * 2];
-    costBuf = new float[con.maxNeighbors()];
+    buf = new int[neighborBufferSize() * 2];
+    costBuf = new float[neighborBufferSize()];
   }
   
   protected void reset() {}
@@ -44,6 +44,11 @@ public abstract class GenericSearch extends GridPathfinder {
     this.startY = startY;
     this.endX = endX;
     this.endY = endY;
+    
+    int[] earlyExit = earlyExit();
+    if (earlyExit != null) {
+      return earlyExit;
+    }
     
     incrementModIndex();
     
@@ -136,6 +141,18 @@ public abstract class GenericSearch extends GridPathfinder {
   }
   
   protected int getNeighborsOfCurrentCell() {
-    return con.getNeighbors(map, currentX, currentY, buf, costBuf);
+    return con.getNeighbors(currentX, currentY, buf, costBuf);
+  }
+  
+  protected int neighborBufferSize() {
+    return con.maxNeighbors();
+  }
+  
+  protected int[] earlyExit() {
+    if (startX == endX && startY == endY) {
+      return new int[] {endX, endY};
+    } else {
+      return null;
+    }
   }
 }

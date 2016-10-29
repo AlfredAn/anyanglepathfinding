@@ -3,11 +3,9 @@ package net.alfredandersson.anyanglepathfinding.engine;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.list.array.TIntArrayList;
 
-public final class VGraphConnections implements GridConnections {
+public final class VGraphConnections extends GridConnections {
   
   private static final Node EMPTY_NODE = new Node(new int[0], new float[0]);
-  
-  private final Map map;
   
   private final Node[][] nodes;
   
@@ -21,7 +19,7 @@ public final class VGraphConnections implements GridConnections {
    * If this is false, VGraphSearch must be used. Otherwise, any search algorithm can be used.
    */
   public VGraphConnections(Map map, boolean precomputeAll) {
-    this.map = map;
+    super(map);
     
     nodes = new Node[map.getWidth() + 1][map.getHeight() + 1];
     
@@ -81,7 +79,7 @@ public final class VGraphConnections implements GridConnections {
   }
   
   @Override
-  public int getNeighbors(Map map, int x, int y, int[] coord, float[] cost) {
+  public int getNeighbors(int x, int y, int[] coord, float[] cost) {
     Node n = nodes[x][y];
     
     System.arraycopy(n.coord, 0, coord, 0, n.coord.length);

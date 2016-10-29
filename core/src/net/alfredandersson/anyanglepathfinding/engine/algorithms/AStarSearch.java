@@ -6,7 +6,7 @@ import net.alfredandersson.anyanglepathfinding.engine.Map;
 
 public class AStarSearch extends DijkstraSearch {
   
-  protected final Heuristic h;
+  public final Heuristic h;
   
   public AStarSearch(Map map, GridConnections con) {
     this(map, con, con.defaultHeuristic());

@@ -1,10 +1,12 @@
 package net.alfredandersson.anyanglepathfinding.engine;
 
-public class EightConnectedGrid implements GridConnections {
-  
-  public static final EightConnectedGrid INSTANCE = new EightConnectedGrid();
+public final class EightConnectedGrid extends GridConnections {
   
   private static final float DIAG_COST = (float)Math.sqrt(2);
+  
+  public EightConnectedGrid(Map map) {
+    super(map);
+  }
   
   @Override
   public int maxNeighbors() {
@@ -12,7 +14,7 @@ public class EightConnectedGrid implements GridConnections {
   }
   
   @Override
-  public int getNeighbors(Map map, int x, int y, int[] coord, float[] cost) {
+  public int getNeighbors(int x, int y, int[] coord, float[] cost) {
     int i = 0;
     int j = 0;
     

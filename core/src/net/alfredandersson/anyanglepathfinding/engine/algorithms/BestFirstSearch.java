@@ -6,7 +6,7 @@ import net.alfredandersson.anyanglepathfinding.engine.Map;
 
 public class BestFirstSearch extends PriorityQueueSearch {
   
-  protected final Heuristic h;
+  public final Heuristic h;
   
   public BestFirstSearch(Map map, GridConnections con) {
     this(map, con, con.defaultHeuristic());
