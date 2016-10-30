@@ -7,12 +7,16 @@ import net.alfredandersson.anyanglepathfinding.engine.Map;
 
 public class BreadthFirstSearch extends GenericSearch {
   
-  private final Deque<Integer>
+  protected final Deque<Integer>
           openListX = new ArrayDeque<>(),
           openListY = new ArrayDeque<>();
   
+  protected final int[][] steps;
+  
   public BreadthFirstSearch(Map map, GridConnections con) {
     super(map, con);
+    
+    steps = new int[map.getWidth() + 1][map.getHeight() + 1];
   }
   
   @Override
@@ -22,9 +26,21 @@ public class BreadthFirstSearch extends GenericSearch {
   }
   
   @Override
+  protected void initStartNode() {
+    super.initStartNode();
+    steps[startX][startY] = 0;
+  }
+  
+  @Override
   protected void addStartNodeToOpenSet(int startX, int startY) {
     openListX.addLast(startX);
     openListY.addLast(startY);
+  }
+  
+  @Override
+  protected void updateNeighbor() {
+    super.updateNeighbor();
+    steps[neighborX][neighborY] = currentSteps + 1;
   }
   
   @Override
@@ -42,5 +58,7 @@ public class BreadthFirstSearch extends GenericSearch {
   protected void popFromOpenSet() {
     currentX = openListX.removeFirst();
     currentY = openListY.removeFirst();
+    
+    currentSteps = steps[currentX][currentY];
   }
 }

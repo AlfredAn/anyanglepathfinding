@@ -19,20 +19,23 @@ public class LazyVGraphSearch extends AStarSearch {
   private final Point tempPoint = new Point();
   
   public LazyVGraphSearch(Map map) {
-    this(map, EuclideanHeuristic.INSTANCE);
+    this(map, new VGraphConnections(map, false));
+  }
+  
+  public LazyVGraphSearch(Map map, VGraphConnections con) {
+    this(map, con, EuclideanHeuristic.INSTANCE);
   }
   
   public LazyVGraphSearch(Map map, Heuristic h) {
-    super(map, new VGraphConnections(map, false), h);
+    this(map, new VGraphConnections(map, false), h);
+  }
+  
+  public LazyVGraphSearch(Map map, VGraphConnections con, Heuristic h) {
+    super(map, con, h);
     
     for (int x = 0; x < map.getWidth() + 1; x++) {
       for (int y = 0; y < map.getHeight() + 1; y++) {
-        int nearCellsBlocked =
-                (map.isBlocked(x - 1, y - 1) ? 1 : 0) +
-                (map.isBlocked(x    , y - 1) ? 1 : 0) +
-                (map.isBlocked(x - 1, y    ) ? 1 : 0) +
-                (map.isBlocked(x    , y    ) ? 1 : 0);
-        if (nearCellsBlocked == 1) {
+        if (con.isValidNode(x, y)) {
           Point p = new Point(x, y);
           validNodeList.add(p);
           validNodeSet.add(p);

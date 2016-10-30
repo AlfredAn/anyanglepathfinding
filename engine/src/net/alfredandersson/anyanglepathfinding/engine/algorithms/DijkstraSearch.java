@@ -37,11 +37,6 @@ public class DijkstraSearch extends PriorityQueueSearch {
   }
   
   @Override
-  protected void addToOpenSet(int x, int y) {
-    open.add(newPoint(x, y, getPriority(x, y)));
-  }
-  
-  @Override
   protected boolean shouldExpandNode() {
     return lastModified[currentX][currentY] != modIndex + 1;
   }

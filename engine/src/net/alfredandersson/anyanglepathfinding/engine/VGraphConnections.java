@@ -11,11 +11,15 @@ public final class VGraphConnections extends GridConnections {
   
   private final int maxNeighbors;
   
+  public VGraphConnections(Map map) {
+    this(map, false);
+  }
+  
   /**
    * 
    * @param map The map to search.
    * @param precomputeAll Whether to precompute visibility between all relevant points.
-   * Takes a long time and uses a lot of memory for large maps but makes the search faster.
+   * Takes a long time and uses a lot of memory, so can only be used for small maps. Not recommended.
    * If this is false, VGraphSearch must be used. Otherwise, any search algorithm can be used.
    */
   public VGraphConnections(Map map, boolean precomputeAll) {
@@ -29,12 +33,7 @@ public final class VGraphConnections extends GridConnections {
     
     for (int x = 0; x < map.getWidth() + 1; x++) {
       for (int y = 0; y < map.getHeight() + 1; y++) {
-        int nearCellsBlocked =
-                (map.isBlocked(x - 1, y - 1) ? 1 : 0) +
-                (map.isBlocked(x    , y - 1) ? 1 : 0) +
-                (map.isBlocked(x - 1, y    ) ? 1 : 0) +
-                (map.isBlocked(x    , y    ) ? 1 : 0);
-        isValid[x][y] = nearCellsBlocked == 1;
+        isValid[x][y] = isValidNode(x, y);
       }
     }
     
@@ -69,8 +68,6 @@ public final class VGraphConnections extends GridConnections {
     }
     
     maxNeighbors = maxNeighbors0;
-    
-    System.out.println("maxNeighbors: " + maxNeighbors);
   }
   
   @Override
@@ -102,5 +99,16 @@ public final class VGraphConnections extends GridConnections {
       this.coord = coord;
       this.cost = cost;
     }
+  }
+  
+  public boolean isValidNode(int x, int y) {
+    boolean b1 = map.isBlocked(x - 1, y - 1);
+    boolean b2 = map.isBlocked(x, y - 1);
+    boolean b3 = map.isBlocked(x, y);
+    boolean b4 = map.isBlocked(x - 1, y);
+    return (b1 && !b2 && !b4)
+        || (b2 && !b3 && !b1)
+        || (b3 && !b4 && !b2)
+        || (b4 && !b1 && !b3);
   }
 }

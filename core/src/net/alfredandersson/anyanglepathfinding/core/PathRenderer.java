@@ -19,8 +19,9 @@ public final class PathRenderer implements Disposable {
           + "  gl_Position = u_projectionViewMatrix * a_position;\n"
           + "}";
   private static final String pathFragmentShader =
-            "void main() {\n"
-          + "  gl_FragColor = vec4(0, 0, 1, 1);\n"
+            "uniform vec4 u_color;\n"
+          + "void main() {\n"
+          + "  gl_FragColor = u_color;\n"
           + "}";
   
   private ShaderProgram shader;
@@ -50,12 +51,19 @@ public final class PathRenderer implements Disposable {
     mesh.setVertices(verts.toArray());
   }
   
-  public void draw(Draw d) {
+  private final float[] buf = new float[4];
+  public void draw(Draw d, float r, float g, float b, float a) {
     if (mesh == null) {
       return;
     }
     
+    buf[0] = r;
+    buf[1] = g;
+    buf[2] = b;
+    buf[3] = a;
+    
     shader.begin();
+    shader.setUniform4fv("u_color", buf, 0, 4);
     d.enableBlending();
     shader.setUniformMatrix("u_projectionViewMatrix", d.cam.combined);
     mesh.render(shader, GL20.GL_LINE_STRIP);

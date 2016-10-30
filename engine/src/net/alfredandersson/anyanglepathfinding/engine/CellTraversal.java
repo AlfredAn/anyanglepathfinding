@@ -72,10 +72,12 @@ public final class CellTraversal {
       }
     } else if (dx == dy) {
       // all moves are diagonal
+      //System.out.println(x + ", " + y);
       if (map.isBlocked(x, y)) return true;
       while (x != endX || y != endY) {
         x += xStep;
         y += yStep;
+        //System.out.println(x + ", " + y);
         if (map.isBlocked(x, y)) return true;
       }
     } else if (dx > dy) {

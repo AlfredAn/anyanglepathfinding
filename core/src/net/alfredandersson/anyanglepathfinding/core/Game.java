@@ -2,6 +2,9 @@ package net.alfredandersson.anyanglepathfinding.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
@@ -23,13 +26,13 @@ public final class Game {
   
   private PathRenderer pathRenderer;
   
-  private final Random rand = new Random();
+  private final Random rand = new XoRoShiRo128PlusRandom();
   
   public Game(AnyAnglePathfinding main) {
     this.main = main;
     
-    try (InputStream in = Gdx.files.internal("maps/test2.png").read(8192)) {
-      map = Map.fromPNG(in);
+    try (InputStream in = new FileInputStream(new File("../../benchmark/assets/testmaps/sc2/aridwastes.txt"))) {
+      map = Map.fromTextAlt(in);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -80,12 +83,15 @@ public final class Game {
     d.cam.update();
     
     mapRenderer.draw(d);
-    pathRenderer.draw(d);
+    pathRenderer.draw(d, 0, 0, 1, 1);
   }
   
   void create() {
     if (mapRenderer == null) {
       mapRenderer = new MapRenderer(map, con);
+    }
+    
+    if (pathRenderer == null) {
       pathRenderer = new PathRenderer();
     }
   }

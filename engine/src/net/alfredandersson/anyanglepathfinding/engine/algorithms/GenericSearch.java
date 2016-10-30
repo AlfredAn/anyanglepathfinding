@@ -1,5 +1,6 @@
 package net.alfredandersson.anyanglepathfinding.engine.algorithms;
 
+import gnu.trove.list.array.TIntArrayList;
 import net.alfredandersson.anyanglepathfinding.engine.GridConnections;
 import net.alfredandersson.anyanglepathfinding.engine.GridPathfinder;
 import net.alfredandersson.anyanglepathfinding.engine.Map;
@@ -8,7 +9,6 @@ public abstract class GenericSearch extends GridPathfinder {
   
   protected final int[][]
           cameFromX, cameFromY,
-          steps,
           lastModified;
   
   protected final int[] buf;
@@ -25,8 +25,6 @@ public abstract class GenericSearch extends GridPathfinder {
     
     cameFromX = new int[map.getWidth() + 1][map.getHeight() + 1];
     cameFromY = new int[map.getWidth() + 1][map.getHeight() + 1];
-    
-    steps = new int[map.getWidth() + 1][map.getHeight() + 1];
     
     lastModified = new int[map.getWidth() + 1][map.getHeight() + 1];
     
@@ -62,8 +60,6 @@ public abstract class GenericSearch extends GridPathfinder {
         continue;
       }
       
-      currentSteps = steps[currentX][currentY];
-      
       if (currentX == endX && currentY == endY) {
         return assemblePath();
       }
@@ -91,10 +87,10 @@ public abstract class GenericSearch extends GridPathfinder {
   protected abstract void addToOpenSet(int x, int y);
   
   protected void initStartNode() {
+    lastModified[startX][startY] = modIndex;
+    
     cameFromX[startX][startY] = startX;
     cameFromY[startX][startY] = startY;
-    
-    steps[startX][startY] = 0;
   }
   
   protected void updateNeighbor() {
@@ -102,8 +98,6 @@ public abstract class GenericSearch extends GridPathfinder {
     
     cameFromX[neighborX][neighborY] = currentX;
     cameFromY[neighborX][neighborY] = currentY;
-    
-    steps[neighborX][neighborY] = currentSteps + 1;
   }
   
   protected abstract boolean isOpenSetEmpty();
@@ -111,11 +105,20 @@ public abstract class GenericSearch extends GridPathfinder {
   protected abstract void popFromOpenSet();
   
   protected int[] assemblePath() {
-    int[] path = new int[(currentSteps + 1) * 2];
+    TIntArrayList path = new TIntArrayList((currentSteps + 1) * 2);
     
-    for (int i = currentSteps; i >= 0; i--) {
-      path[i * 2] = currentX;
-      path[i * 2 + 1] = currentY;
+    while (true) {
+      path.add(currentX);
+      path.add(currentY);
+      
+      if (currentX == startX && currentY == startY) {
+        int[] result = new int[path.size()];
+        for (int i = 0; i < result.length / 2; i++) {
+          result[i * 2] = path.getQuick(result.length - 2 * i - 2);
+          result[i * 2 + 1] = path.getQuick(result.length - 2 * i - 1);
+        }
+        return result;
+      }
       
       int newX = cameFromX[currentX][currentY];
       int newY = cameFromY[currentX][currentY];
@@ -123,8 +126,6 @@ public abstract class GenericSearch extends GridPathfinder {
       currentX = newX;
       currentY = newY;
     }
-    
-    return path;
   }
   
   protected boolean shouldExpandNode() {
