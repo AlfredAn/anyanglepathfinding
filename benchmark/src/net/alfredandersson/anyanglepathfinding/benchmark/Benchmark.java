@@ -28,16 +28,16 @@ public final class Benchmark {
   static {
     try {
       datasets = new Dataset[] {
-        //new RandomMapDataset(32, 100, 100, 0.1f),
-        //new RandomMapDataset(32, 100, 100, 0.2f),
-        //new RandomMapDataset(32, 100, 100, 0.3f),
-        //new RandomMapDataset(32, 500, 500, 0.1f),
-        //new RandomMapDataset(32, 500, 500, 0.2f),
-        //new RandomMapDataset(32, 500, 500, 0.3f),
-        //new TextFileDataset(new File("testmaps/bgmaps")),
-        //new TextFileDataset(new File("testmaps/da2")),
-        //new TextFileDataset(new File("testmaps/dao")),
-        //new TextFileDataset(new File("testmaps/sc1")),
+        new RandomMapDataset(32, 100, 100, 0.1f),
+        new RandomMapDataset(32, 100, 100, 0.2f),
+        new RandomMapDataset(32, 100, 100, 0.3f),
+        new RandomMapDataset(32, 500, 500, 0.1f),
+        new RandomMapDataset(32, 500, 500, 0.2f),
+        new RandomMapDataset(32, 500, 500, 0.3f),
+        new TextFileDataset(new File("testmaps/bgmaps")),
+        new TextFileDataset(new File("testmaps/da2")),
+        new TextFileDataset(new File("testmaps/dao")),
+        new TextFileDataset(new File("testmaps/sc1")),
         new AltTextFileDataset(new File("testmaps/sc2")),
       };
     } catch (NullPointerException e) {
